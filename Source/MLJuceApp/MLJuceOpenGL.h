@@ -34,7 +34,7 @@
 #ifndef JUCE_OPENGL_H_INCLUDED
 #define JUCE_OPENGL_H_INCLUDED
 
-#include "../juce_gui_extra/juce_gui_extra.h"
+#include "modules/juce_gui_extra/juce_gui_extra.h"
 
 #undef JUCE_OPENGL
 #define JUCE_OPENGL 1
@@ -114,7 +114,7 @@ namespace juce
 	class OpenGLTexture;
 	class OpenGLFrameBuffer;
 	class OpenGLShaderProgram;
-	
+
 #include "modules/juce_opengl/geometry/juce_Quaternion.h"
 #include "modules/juce_opengl/geometry/juce_Matrix3D.h"
 #include "modules/juce_opengl/geometry/juce_Vector3D.h"
@@ -133,7 +133,7 @@ namespace juce
 #include "modules/juce_opengl/opengl/juce_OpenGLShaderProgram.h"
 #include "modules/juce_opengl/opengl/juce_OpenGLTexture.h"
 #include "modules/juce_opengl/utils/juce_OpenGLAppComponent.h"
-	
+
 }
 
 #endif   // JUCE_OPENGL_H_INCLUDED

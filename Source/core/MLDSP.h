@@ -6,7 +6,9 @@
 #ifndef _ML_DSP_H
 #define _ML_DSP_H
 
-// NOTE should require nothing
+#include <cassert>
+#include <iostream>
+#include <string>
 
 #ifdef _WIN32
 	#include <memory>
@@ -19,17 +21,14 @@
 	#define	MAXFLOAT	((float)3.40282346638528860e+38)
 #endif
 
+#ifndef MAXFLOAT
+	#include <float.h>
+	#define MAXFLOAT FLT_MAX
+#endif
+
 #ifdef __SSE__
 #include <xmmintrin.h>
 #endif
-
-#define SHUFFLE(a, b, c, d) ((a<<6) | (b<<4) | (c<<2) | (d))
-#define SHUFFLE_R(a, b, c, d) ((d<<6) | (c<<4) | (b<<2) | (a))
-
-#include <cassert>
-#include <iostream>
-#include <stdint.h>
-#include <string>
 
 #ifndef DEBUG
 #define force_inline  inline __attribute__((always_inline))
@@ -114,6 +113,8 @@ MLSample* alignToCacheLine(const MLSample* p);
 int bitsToContain(int n);
 int ilog2(int n);
 
+// TODO make these interpolators lambdas , useful with signals
+
 inline MLSample lerp(const MLSample a, const MLSample b, const MLSample m)
 {
 	return(a + m*(b-a));
@@ -127,6 +128,29 @@ inline MLSample lerpBipolar(const MLSample a, const MLSample b, const MLSample c
 	MLSample q = pos*c + neg*a;
 	return (b + (q - b)*absm);
 }		
+
+inline MLSample herp(const MLSample* t, float phase)
+{
+	// 4-point, 3rd-order Hermite interpolation
+	const float c = (t[2] - t[0]) * 0.5f;
+	const float v = t[1] - t[2];
+	const float w = c + v;
+	const float a = w + v + (t[3] - t[1]) * 0.5f;
+	const float b = w + a;
+	return (((a * phase) - b) * phase + c) * phase + t[1];
+}
+
+inline MLSample werp(const MLSample* t, float phase)
+{
+	// 4-point, 2nd-order Watte trilinear interpolation
+	const float threeOverTwo = 1.5f;
+	const float oneHalf = 0.5f;
+	float ym1py2 = t[0] + t[3];
+	float c0 = t[1];
+	float c1 = threeOverTwo * t[2] - oneHalf * (t[1] + ym1py2);
+	float c2 = oneHalf * (ym1py2 - t[1] - t[2]);
+	return (c2 * phase + c1) * phase + c0;
+}
 
 float scaleForRangeTransform(float a, float b, float c, float d); // TODO replace with MLRange object
 float offsetForRangeTransform(float a, float b, float c, float d);
