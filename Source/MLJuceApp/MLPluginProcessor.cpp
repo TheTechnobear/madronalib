@@ -11,7 +11,6 @@ const char* kUDPAddressName = "localhost";
 #if OSC_PARAMS	
 	const int kSeqInfoPort = 9123;
 	const int kUDPOutputBufferSize = 1024;
-
 	const int kScribbleScenePort = 9223;
 #endif
 
@@ -57,15 +56,11 @@ MLPluginProcessor::MLPluginProcessor() :
 	
 	mpOSCVisualsBuf.resize(kUDPOutputBufferSize);
 	mVisualsSocket = std::unique_ptr<UdpTransmitSocket>(new UdpTransmitSocket( IpEndpointName(kUDPAddressName, kScribbleScenePort)));		
-		
-	
-	
 #endif		
 }
 
 MLPluginProcessor::~MLPluginProcessor()
 {
-	debug() << "deleting MLPluginProcessor\n";
 #if defined (__APPLE__)
 	mT3DHub.removeListener(this);
 #endif
@@ -1054,13 +1049,13 @@ void MLPluginProcessor::saveStateToRelativePath(const std::string& path)
 	
     std::string extension (".mlpreset");
     std::string extPath = path + extension;
-    const MLFilePtr f = mPresetFiles->createFile(extPath);
-    if(!f->getJuceFile().exists())
+    const MLFile& f = mPresetFiles->createFile(extPath);
+    if(!f.getJuceFile().exists())
     {
-        f->getJuceFile().create();
+        f.getJuceFile().create();
     }
 	
-    f->getJuceFile().replaceWithText(getStateAsText());
+    f.getJuceFile().replaceWithText(getStateAsText());
 	
 	// reset state stack and push current state for recall
 	mpPatchState->clearStateStack();

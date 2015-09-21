@@ -23,7 +23,7 @@ MLButton::MLButton () :
 	MLLookAndFeel* myLookAndFeel = MLLookAndFeel::getInstance();
 	setBufferedToImage(myLookAndFeel->getDefaultBufferMode());
 	
-	setProperty("toggle", 1);
+	setProperty("toggle", true);
 	mDoRollover = false;
 	
 	setFillColor (Colours::lightgrey);
@@ -180,6 +180,11 @@ void MLButton::resizeWidget(const MLRect& b, const int u)
  		MLWidget::resizeWidget(b, u);
 		mLineThickness = u/128.f;
     }
+}
+
+void MLButton::setLineThickness(float f)
+{
+	mLineThickness = f;
 }
 
 void MLButton::setToggleValues(float lo, float hi)
