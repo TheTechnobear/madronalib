@@ -1,5 +1,5 @@
 //
-//  MLTypes.h
+//  MLStringCompare.h
 //  MadronaLib
 //
 //  Created by Randy Jones on 4/25/14.
@@ -8,8 +8,8 @@
 
 // types and functors for supporting core ML classes.
 
-#ifndef MLTypes_h
-#define MLTypes_h
+#ifndef MLStringCompare_h
+#define MLStringCompare_h
 
 struct MLStringCompareFn : std::binary_function<std::string, std::string, bool>
 {
